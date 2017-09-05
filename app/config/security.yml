@@ -9,11 +9,8 @@ security:
         csv_file:
             id: AppBundle\Security\UserProvider
 
-    role_hierarchy:
-        
-
     encoders:
-        AppBundle\Security\User: plaintext
+        AppBundle\Security\User: bcrypt
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs

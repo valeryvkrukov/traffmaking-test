@@ -23,12 +23,14 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 	private $loginUrl;
     private $defaultSuccessRedirectUrl;
     private $csrfTokenManager;
+    private $container;
 
     public function __construct(ContainerInterface $container, CsrfTokenManagerInterface $csrfTokenManager)
     {
     	$this->csrfTokenManager = $csrfTokenManager;
     	$this->loginUrl = $container->get('router')->generate('login');
     	$this->defaultSuccessRedirectUrl = $container->get('router')->generate('homepage');
+    	$this->container = $container;
     }
 
 	public function getLoginUrl()
@@ -70,7 +72,9 @@ class UserAuthenticator extends AbstractGuardAuthenticator
 	public function checkCredentials($credentials, UserInterface $user)
 	{
 		if (isset($credentials['password'])) {
-			return ($credentials['password'] === $user->getPassword());
+			$encoderFactory = $this->container->get('security.encoder_factory');
+			$encoder = $encoderFactory->getEncoder($user);
+			return $encoder->isPasswordValid($user->getPassword(), $credentials['password'], $user->getSalt());
 		} else {
 			return;
 		}

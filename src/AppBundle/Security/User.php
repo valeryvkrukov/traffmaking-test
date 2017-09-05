@@ -2,9 +2,8 @@
 namespace AppBundle\Security;
 
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Security\Core\User\EquatableInterface;
 
-class User implements UserInterface//, EquatableInterface
+class User implements UserInterface
 {
 	private $username;
 	private $password;
